@@ -1,0 +1,19 @@
+2 punkty wydania
+4 kasy
+
+maks 2*n klienckich watkow
+
+watki:
+- klient
+- pracownik
+- kasjer
+
+zasoby:
+
+- kolejka przy punkcie wydania
+- kasa
+- miejsca przy stolikach
+
+Czas wydania i obslugi platnosci (pracownik i kasjer): Thread.sleep(rnd.next())
+
+
