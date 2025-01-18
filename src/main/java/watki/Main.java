@@ -20,15 +20,12 @@ public class Main {
         frame.setSize(800, 600);
 
         StartupPanel startupPanel = new StartupPanel();
-        startupPanel.setStartAction(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int numClients = startupPanel.getNumClients();
-                int numWorkers = startupPanel.getNumWorkers();
-                int numCashiers = startupPanel.getNumCashiers();
-                int numSeats = startupPanel.getNumSeats();
-                startSimulation(frame, numClients, numWorkers, numCashiers, numSeats);
-            }
+        startupPanel.setStartAction(e -> {
+            int numClients = startupPanel.getNumClients();
+            int numWorkers = startupPanel.getNumWorkers();
+            int numCashiers = startupPanel.getNumCashiers();
+            int numSeats = startupPanel.getNumSeats();
+            startSimulation(frame, numClients, numWorkers, numCashiers, numSeats);
         });
 
         frame.add(startupPanel);

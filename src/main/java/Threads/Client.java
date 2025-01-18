@@ -1,5 +1,6 @@
 package Threads;
 
+import lombok.Getter;
 import visualization.VisualizationPanel;
 
 import java.util.concurrent.BlockingQueue;
@@ -8,6 +9,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Client extends Thread {
     private static char nextLetter = 'A';
+
+    @Getter
     private final char letter;
     private final BlockingQueue<Client> entranceQueue;
     private final BlockingQueue<Client>[] queuesToPoints;
@@ -24,10 +27,6 @@ public class Client extends Thread {
         synchronized (Client.class) {
             this.letter = nextLetter++;
         }
-    }
-
-    public char getLetter() {
-        return letter;
     }
 
     @Override
@@ -78,13 +77,14 @@ public class Client extends Thread {
     private void eatMeal() throws InterruptedException {
         seats.acquire();
         synchronized (visualizationPanel) {
-            visualizationPanel.updateSeats();
+            visualizationPanel.seatClient(this);
         }
 
-        Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 3000));
+        // Simulate time spent eating
+        Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 5000));
 
         synchronized (visualizationPanel) {
-            visualizationPanel.updateSeats();
+            visualizationPanel.unseatClient(this);
         }
         seats.release();
     }

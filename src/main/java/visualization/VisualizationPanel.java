@@ -29,7 +29,7 @@ public class VisualizationPanel extends JPanel {
         this.seatedClients = new ArrayList<>();
         this.seatLabels = new JLabel[seats.availablePermits()];
 
-        setLayout(new GridLayout(queuesToPoints.length + queuesToCashiers.length + 3, 1));
+        setLayout(new GridLayout(queuesToPoints.length + queuesToCashiers.length + 4, 1));
 
         entranceQueueLabel = new JLabel();
         add(entranceQueueLabel);
@@ -46,7 +46,7 @@ public class VisualizationPanel extends JPanel {
             add(cashiersQueueLabels[i]);
         }
 
-        JPanel seatsPanel = new JPanel(new GridLayout(1, seats.availablePermits(), 5, 5));
+        JPanel seatsPanel = new JPanel(new GridLayout(2, seats.availablePermits() / 2, 5, 5));
         for (int i = 0; i < seats.availablePermits(); i++) {
             seatLabels[i] = new JLabel("*", SwingConstants.CENTER);
             seatLabels[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -67,14 +67,26 @@ public class VisualizationPanel extends JPanel {
 
     public synchronized void seatClient(Client client) {
         if (seatedClients.size() < seats.availablePermits()) {
-            seatedClients.add(client);
-            updateState();
+            animateSeating(client, true);
         }
     }
 
     public synchronized void unseatClient(Client client) {
-        seatedClients.remove(client);
-        updateState();
+        animateSeating(client, false);
+    }
+
+    private void animateSeating(Client client, boolean isSeating) {
+        Timer timer = new Timer(10, null);
+        timer.addActionListener(e -> {
+            if (isSeating) {
+                seatedClients.add(client);
+            } else {
+                seatedClients.remove(client);
+            }
+            updateSeatsVisualization();
+            timer.stop();
+        });
+        timer.start();
     }
 
     private void updateState() {
